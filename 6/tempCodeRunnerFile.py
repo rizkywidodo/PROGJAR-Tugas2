@@ -1,0 +1,1 @@
+read_ready, write_ready, exception = select.select(input_socket, [], [])
