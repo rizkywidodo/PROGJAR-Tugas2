@@ -23,6 +23,8 @@ try:
             if sock == server_socket:
                 client_socket, client_address = server_socket.accept()
                 input_socket.append(client_socket)
+                print(f">>{client_address} connection established!")
+                
             
             else:
                 data = sock.recv(1024).decode()
@@ -30,7 +32,6 @@ try:
 
                 request_header = data.split('\r\n')
                 request_path = request_header[0].split()[1]
-                #request_path = '/'
                 response_header = ''
                 response_data = ''
                 
@@ -54,7 +55,7 @@ try:
                         <meta charset="UTF-8">
                         <meta http-equiv="X-UA-Compatible" content="IE=edge">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>Halo Ngab!</title>
+                        <title>Directory</title>
                     </head>
                     <body>
                         <h1>Index of directory</h1>
@@ -94,6 +95,8 @@ try:
                         f.close()
                         client_socket.close()
                         input_socket.remove(sock)
+                        print(f"File {request_path} has been sent!")
+                        print(f"client Disconnected!\n")
                         break
                         
                     else:

@@ -11,51 +11,11 @@ try:
         server_address = (url, 80)
         client_socket.connect(server_address)
         
+        print(">> Connected to web server!\n>?")
         message = sys.stdin.readline()
         message = message.rstrip()
-        print(message)
         
-        if message.split()[0] == 'index.html':
-            
-            request_header = 'GET /index.html HTTP/1.0\r\n'
-            request_header += 'Host: ' + url + '\r\n'
-            request_header += '\r\n'
-
-            client_socket.send(request_header.encode())
-
-            response = ''
-            
-            while True:
-                recv = client_socket.recv(1024).decode()
-                if not recv: 
-                    break
-                response += recv
-
-            soup = BeautifulSoup(response, 'html.parser')
-            print(soup.get_text())
-            client_socket.close()
-        
-        elif message.split()[0] == 'directory':
-        
-            request_header = 'GET /directory HTTP/1.0\r\n'
-            request_header += 'Host: ' + url + '\r\n'
-            request_header += '\r\n'
-
-            client_socket.send(request_header.encode())
-
-            response = ''
-
-            while True:
-                recv = client_socket.recv(1024).decode()
-                if not recv: 
-                    break
-                response += recv
-
-            soup = BeautifulSoup(response, 'html.parser')
-            print(soup.get_text())
-            client_socket.close()
-            
-        elif message.split()[0] == 'download':
+        if message.split()[0] == 'download':
             
             filename = message.split(" ")[1]
             
@@ -81,26 +41,37 @@ try:
                 f.write(bytes_read)
             f.close()
             client_socket.close()
+            print("File transfer completed!")
+            continue
+        
+        elif message.split()[0] == 'index.html':
+            
+            request_header = 'GET /index.html HTTP/1.0\r\n'
+        
+        elif message.split()[0] == 'directory':
+        
+            request_header = 'GET /directory HTTP/1.0\r\n'
             
         else:
-            
             request_header = 'GET /' + message + ' HTTP/1.0\r\n'
-            request_header += 'Host: ' + url + '\r\n'
-            request_header += '\r\n'
+            
+            
+        request_header += 'Host: ' + url + '\r\n'
+        request_header += '\r\n'
 
-            client_socket.send(request_header.encode())
+        client_socket.send(request_header.encode())
 
-            response = ''
+        response = ''
+        
+        while True:
+            recv = client_socket.recv(1024).decode()
+            if not recv: 
+                break
+            response += recv
 
-            while True:
-                recv = client_socket.recv(1024).decode()
-                if not recv: 
-                    break
-                response += recv
-
-            soup = BeautifulSoup(response, 'html.parser')
-            print(soup.get_text())
-            client_socket.close()
+        soup = BeautifulSoup(response, 'html.parser')
+        print(soup.get_text())
+        client_socket.close()
             
 except KeyboardInterrupt:
     client_socket.close()
