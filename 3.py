@@ -11,3 +11,5 @@ ver = response[0].split(' ')[0]
 print(ver)
 
 sock.close()
+
+# DONE

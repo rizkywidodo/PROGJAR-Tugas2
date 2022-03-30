@@ -6,3 +6,5 @@ sock.send(b"GET / HTTP/1.1\r\nHost:www.classroom.its.ac.id/my/\r\n\r\n")
 response = sock.recv(4096)
 sock.close()
 print(response.decode())
+
+# BELUM

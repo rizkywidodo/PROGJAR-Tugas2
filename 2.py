@@ -13,3 +13,5 @@ status = response[0].split(' ')[1] + " " + response[0].split(' ')[2]
 # print(status)
 
 sock.close()
+
+# BELUM

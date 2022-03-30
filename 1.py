@@ -13,3 +13,5 @@ status = response[0].split('HTTP/1.1 ')[1]
 print(status)
 
 sock.close()
+
+# DONE
