@@ -7,8 +7,9 @@ sock.send(b"GET / HTTP/1.1\r\nHost:its.ac.id\r\n\r\n")
 response = sock.recv(4096)
 
 response = response.decode()
+#print(response)
 response = response.split("\r\n")
-status = response[0].split(' ')[1] + " " + response[0].split(' ')[2]
+status = response[0].split('HTTP/1.1 ')[1]
 print(status)
 
 sock.close()
