@@ -3,6 +3,7 @@ import select
 import sys
 import os
 import threading
+import time
 
 f = open('6/server/httpserver.conf', 'r')
 port = int(f.read())
@@ -116,7 +117,7 @@ try:
                 t = threading.Thread(target=worker, args=(client_socket,))
                 threads.append(t)
                 t.start()
-            
+                time.sleep(10)
 except KeyboardInterrupt:
     server_socket.close()
     sys.exit(0)
