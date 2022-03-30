@@ -3,7 +3,7 @@ import select
 import sys
 import os
 
-f = open('6/httpserver.conf', 'r')
+f = open('6/server/httpserver.conf', 'r')
 port = int(f.read())
 f.close()
 
@@ -36,7 +36,7 @@ try:
                 
                 if request_path == '/index.html' or request_path == '/':
                     
-                    f = open('6/index.html', 'r')
+                    f = open('6/server/index.html', 'r')
                     response_data = f.read()
                     f.close()
 
@@ -59,7 +59,7 @@ try:
                     <body>
                         <h1>Index of directory</h1>
                     '''
-                    for root, dirs, files in os.walk("6/dataset", topdown=False):
+                    for root, dirs, files in os.walk("6/server/dataset", topdown=False):
                         for name in files:
                             response_data += '''
                                 <div>
@@ -84,14 +84,27 @@ try:
                     response_header += '\r\n'
                 
                 else:
-                    f = open('6/404.html', 'r')
-                    response_data = f.read()
-                    f.close()
-                    content_length = len(response_data)
-                    response_header = 'HTTP/1.0 404 Not Found\r\n'
-                    response_header += 'Content-Type: text/html; charset=UTF-8\r\n'
-                    response_header += 'Content-Length: ' + str(content_length)  + '\r\n'
-                    response_header += '\r\n'
+                    if os.path.exists(f"6/server/dataset{request_path}"):
+                        f = open(f"6/server/dataset{request_path}", 'rb')
+                        while True:
+                            bytes_read = f.read(4096)
+                            if not bytes_read:
+                                break
+                            sock.sendall(bytes_read)
+                        f.close()
+                        client_socket.close()
+                        input_socket.remove(sock)
+                        break
+                        
+                    else:
+                        f = open('6/server/404.html', 'r')
+                        response_data = f.read()
+                        f.close()
+                        content_length = len(response_data)
+                        response_header = 'HTTP/1.0 404 Not Found\r\n'
+                        response_header += 'Content-Type: text/html; charset=UTF-8\r\n'
+                        response_header += 'Content-Length: ' + str(content_length)  + '\r\n'
+                        response_header += '\r\n'
 
                 sock.sendall((response_header + response_data).encode())
                 client_socket.close()
