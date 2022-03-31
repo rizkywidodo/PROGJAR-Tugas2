@@ -7,11 +7,11 @@ sock.send(b"GET / HTTP/1.1\r\nHost:its.ac.id\r\n\r\n")
 response = sock.recv(4096)
 
 response = response.decode()
-print(response)
+#print(response)
 response = response.split("\r\n")
-status = response[0].split(' ')[1] + " " + response[0].split(' ')[2]
-# print(status)
+status = response[3].split('Content-Type: ')[1]
+print(status)
 
 sock.close()
 
-# BELUM
+# DONE
